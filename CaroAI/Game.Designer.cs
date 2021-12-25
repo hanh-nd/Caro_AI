@@ -52,9 +52,6 @@ namespace CaroAI
             this.độKhóToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.easyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mediumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.computerSpeedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fastToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.slowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pnlInfo.SuspendLayout();
             this.grpMode.SuspendLayout();
@@ -113,9 +110,9 @@ namespace CaroAI
             this.rBtnCVC.AutoSize = true;
             this.rBtnCVC.Location = new System.Drawing.Point(6, 53);
             this.rBtnCVC.Name = "rBtnCVC";
-            this.rBtnCVC.Size = new System.Drawing.Size(94, 21);
+            this.rBtnCVC.Size = new System.Drawing.Size(134, 21);
             this.rBtnCVC.TabIndex = 10;
-            this.rBtnCVC.Text = "Máy - Máy";
+            this.rBtnCVC.Text = "Máy 01 - Máy 02";
             this.rBtnCVC.UseVisualStyleBackColor = true;
             this.rBtnCVC.CheckedChanged += new System.EventHandler(this.rBtnCVC_CheckedChanged);
             // 
@@ -125,10 +122,10 @@ namespace CaroAI
             this.rBtnPVC.Checked = true;
             this.rBtnPVC.Location = new System.Drawing.Point(6, 28);
             this.rBtnPVC.Name = "rBtnPVC";
-            this.rBtnPVC.Size = new System.Drawing.Size(105, 21);
+            this.rBtnPVC.Size = new System.Drawing.Size(125, 21);
             this.rBtnPVC.TabIndex = 9;
             this.rBtnPVC.TabStop = true;
-            this.rBtnPVC.Text = "Người - Máy";
+            this.rBtnPVC.Text = "Người - Máy 01";
             this.rBtnPVC.UseVisualStyleBackColor = true;
             // 
             // btnPlay
@@ -152,7 +149,7 @@ namespace CaroAI
             this.grpXO.Size = new System.Drawing.Size(261, 85);
             this.grpXO.TabIndex = 0;
             this.grpXO.TabStop = false;
-            this.grpXO.Text = "Bạn chọn";
+            this.grpXO.Text = "Máy 01";
             // 
             // imgCurrentPlayer
             // 
@@ -169,9 +166,9 @@ namespace CaroAI
             this.rBtnO.AutoSize = true;
             this.rBtnO.Location = new System.Drawing.Point(6, 55);
             this.rBtnO.Name = "rBtnO";
-            this.rBtnO.Size = new System.Drawing.Size(69, 21);
+            this.rBtnO.Size = new System.Drawing.Size(54, 21);
             this.rBtnO.TabIndex = 4;
-            this.rBtnO.Text = "Đi sau";
+            this.rBtnO.Text = "AI-2";
             this.rBtnO.UseVisualStyleBackColor = true;
             // 
             // label3
@@ -189,10 +186,10 @@ namespace CaroAI
             this.rBtnX.Checked = true;
             this.rBtnX.Location = new System.Drawing.Point(6, 28);
             this.rBtnX.Name = "rBtnX";
-            this.rBtnX.Size = new System.Drawing.Size(78, 21);
+            this.rBtnX.Size = new System.Drawing.Size(54, 21);
             this.rBtnX.TabIndex = 3;
             this.rBtnX.TabStop = true;
-            this.rBtnX.Text = "Đi trước";
+            this.rBtnX.Text = "AI-1";
             this.rBtnX.UseVisualStyleBackColor = true;
             // 
             // prbCoolDown
@@ -241,7 +238,6 @@ namespace CaroAI
             // 
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.độKhóToolStripMenuItem,
-            this.computerSpeedToolStripMenuItem,
             this.quitToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(60, 24);
@@ -261,42 +257,17 @@ namespace CaroAI
             this.easyToolStripMenuItem.Checked = true;
             this.easyToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.easyToolStripMenuItem.Name = "easyToolStripMenuItem";
-            this.easyToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.easyToolStripMenuItem.Size = new System.Drawing.Size(118, 26);
             this.easyToolStripMenuItem.Text = "Dễ";
             this.easyToolStripMenuItem.Click += new System.EventHandler(this.easyToolStripMenuItem_Click);
             // 
             // mediumToolStripMenuItem
             // 
             this.mediumToolStripMenuItem.Name = "mediumToolStripMenuItem";
-            this.mediumToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.mediumToolStripMenuItem.Size = new System.Drawing.Size(118, 26);
             this.mediumToolStripMenuItem.Text = "Khó";
             this.mediumToolStripMenuItem.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.mediumToolStripMenuItem.Click += new System.EventHandler(this.mediumToolStripMenuItem_Click);
-            // 
-            // computerSpeedToolStripMenuItem
-            // 
-            this.computerSpeedToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fastToolStripMenuItem,
-            this.slowToolStripMenuItem});
-            this.computerSpeedToolStripMenuItem.Name = "computerSpeedToolStripMenuItem";
-            this.computerSpeedToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.computerSpeedToolStripMenuItem.Text = "Tốc độ";
-            // 
-            // fastToolStripMenuItem
-            // 
-            this.fastToolStripMenuItem.Checked = true;
-            this.fastToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.fastToolStripMenuItem.Name = "fastToolStripMenuItem";
-            this.fastToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
-            this.fastToolStripMenuItem.Text = "Nhanh";
-            this.fastToolStripMenuItem.Click += new System.EventHandler(this.fastToolStripMenuItem_Click);
-            // 
-            // slowToolStripMenuItem
-            // 
-            this.slowToolStripMenuItem.Name = "slowToolStripMenuItem";
-            this.slowToolStripMenuItem.Size = new System.Drawing.Size(135, 26);
-            this.slowToolStripMenuItem.Text = "Chậm";
-            this.slowToolStripMenuItem.Click += new System.EventHandler(this.slowToolStripMenuItem_Click);
             // 
             // quitToolStripMenuItem
             // 
@@ -356,9 +327,6 @@ namespace CaroAI
         public System.Windows.Forms.GroupBox grpMode;
         public System.Windows.Forms.GroupBox grpXO;
         public System.Windows.Forms.RadioButton rBtnPVC;
-        private System.Windows.Forms.ToolStripMenuItem computerSpeedToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem fastToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem slowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem độKhóToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem easyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mediumToolStripMenuItem;

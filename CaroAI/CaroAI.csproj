@@ -61,6 +61,7 @@
     <Compile Include="Cons.cs" />
     <Compile Include="CellInfo.cs" />
     <Compile Include="SimpleAI.cs" />
+    <Compile Include="SimulationBoard.cs" />
     <EmbeddedResource Include="Game.resx">
       <DependentUpon>Game.cs</DependentUpon>
     </EmbeddedResource>

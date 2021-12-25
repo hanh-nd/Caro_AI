@@ -19,10 +19,10 @@ namespace CaroAI
         public Point FindBestMove(int[,] CurrentStatus, int CurrentTurn)
         {
             List<Point> Moves = GetPossibleMoves(CurrentStatus, CurrentTurn);
-            if (CurrentTurn == 2)
-                Console.WriteLine("Simple AI attempting: " + Moves.Count + "moves.");
-            else
-                Console.WriteLine("Advanced AI attempting: " + Moves.Count + "moves.");
+            //if (CurrentTurn == 2)
+            //    Console.WriteLine("Simple AI attempting: " + Moves.Count + " moves.");
+            //else
+            //    Console.WriteLine("Advanced AI attempting: " + Moves.Count + " moves.");
 
             double[] FeasiblePointValues = new double[Moves.Count];
 
@@ -136,15 +136,19 @@ namespace CaroAI
                         consecutive++;
                     else if (CurrentStatus[rw, cl] == 0)
                     {
+                        for (int i = 1; i < 5; ++i)
+                        {
+                            if (CheckPosition(rw, cl + i) && CurrentStatus[rw, cl + i] == (ForPlayer ? PlayerTurn : ComputerTurn))
+                                consecutive++;
+                            else break;
+                        }
                         if (consecutive > 0)
                         {
                             blocks--;
                             score += getConsecutiveSetScore(consecutive, blocks, ForPlayer == IsPlayerTurn);
                             consecutive = 0;
-                            blocks = 1;
                         }
-                        else
-                            blocks = 1;
+                        blocks = 1;
                     }
                     else if (consecutive > 0)
                     {
@@ -181,17 +185,19 @@ namespace CaroAI
                     }
                     else if (CurrentStatus[rw, cl] == 0)
                     {
+                        for (int i = 1; i < 5; ++i)
+                        {
+                            if (CheckPosition(rw + i, cl) && CurrentStatus[rw + i, cl] == (ForPlayer ? PlayerTurn : ComputerTurn))
+                                consecutive++;
+                            else break;
+                        }
                         if (consecutive > 0)
                         {
                             blocks--;
                             score += getConsecutiveSetScore(consecutive, blocks, ForPlayer == IsPlayerTurn);
                             consecutive = 0;
-                            blocks = 1;
-                        }
-                        else
-                        {
-                            blocks = 1;
-                        }
+                        }                      
+                        blocks = 1;
                     }
                     else if (consecutive > 0)
                     {
@@ -213,7 +219,7 @@ namespace CaroAI
                 consecutive = 0;
                 blocks = 2;
             }
-
+             
             return score;
         }
         private int evaluatePrimaryDiagonal(int[,] CurrentStatus, bool ForPlayer, bool IsPlayerTurn)
@@ -236,17 +242,19 @@ namespace CaroAI
                     }
                     else if (CurrentStatus[i, j] == 0)
                     {
+                        for (int rw = 1; rw < 5; ++rw)
+                        {
+                            if (CheckPosition(rw + i, rw + j) && CurrentStatus[rw + i, rw + j] == (ForPlayer ? PlayerTurn : ComputerTurn))
+                                consecutive++;
+                            else break;
+                        }
                         if (consecutive > 0)
                         {
                             blocks--;
                             score += getConsecutiveSetScore(consecutive, blocks, ForPlayer == IsPlayerTurn);
                             consecutive = 0;
-                            blocks = 1;
                         }
-                        else
-                        {
-                            blocks = 1;
-                        }
+                        blocks = 1;
                     }
                     else if (consecutive > 0)
                     {
@@ -288,6 +296,12 @@ namespace CaroAI
                     }
                     else if (CurrentStatus[i, j] == 0)
                     {
+                        for (int rw = 1; rw < 5; ++rw)
+                        {
+                            if (CheckPosition(i + rw, j - rw) && CurrentStatus[i + rw, j - rw] == (ForPlayer ? PlayerTurn : ComputerTurn))
+                                consecutive++;
+                            else break;
+                        }
                         if (consecutive > 0)
                         {
                             blocks--;
@@ -330,6 +344,11 @@ namespace CaroAI
 
             switch (count)
             {
+                case 10:
+                case 9:
+                case 8:
+                case 7:
+                case 6:
                 case 5:
                     if (CurrentTurn && blocks == 2) return 0;
                     return WINNING_POINT;

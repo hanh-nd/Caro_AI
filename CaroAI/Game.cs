@@ -6,14 +6,16 @@ namespace CaroAI
     public partial class Game : Form
     {
         #region Properties
-        private Board board;
+        private SimulationBoard board;
+        //private Board board;
         private bool isEnded = true;
         #endregion
 
         public Game()
         {
             InitializeComponent();
-            board = new Board(pnlCaroBoard, this);
+            board = new SimulationBoard(pnlCaroBoard, this);
+            //board = new Board(pnlCaroBoard, this);
             board.EndedGame += Board_EndedGame;
             board.PlayerMarked += Board_PlayerMarked;
             InitializeCoolDownProperties();
@@ -120,19 +122,6 @@ namespace CaroAI
             board.HelpPlayerMove();
         }
 
-        private void fastToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            fastToolStripMenuItem.Checked = true;
-            slowToolStripMenuItem.Checked = false;
-            board.ComputerSpeed = 0;
-        }
-
-        private void slowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            fastToolStripMenuItem.Checked = false;
-            slowToolStripMenuItem.Checked = true;
-            board.ComputerSpeed = Cons.COMPUTER_DELAY;
-        }
 
         private void Game_Load(object sender, EventArgs e)
         {
@@ -151,7 +140,7 @@ namespace CaroAI
         {
             easyToolStripMenuItem.Checked = false;
             mediumToolStripMenuItem.Checked = true;
-            Cons.MAX_DEPTH = 4;
+            Cons.MAX_DEPTH = 3;
         }
     }
 }

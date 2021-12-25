@@ -21,6 +21,8 @@ namespace CaroAI
         private int currentPlayer;
         public int CurrentPlayer { get => currentPlayer; set => currentPlayer = value; }
 
+        public int ComputerID;
+
         private List<List<Button>> matrix;
         public List<List<Button>> Matrix { get => matrix; set => matrix = value; }
 
@@ -56,7 +58,6 @@ namespace CaroAI
         public AdvancedAI advancedAI;
         public SimpleAI simpleAI;
 
-        public int ComputerSpeed = 0;
 
         private bool isPVC;
         public bool IsPVC { get => isPVC; set => isPVC = value; }
@@ -83,7 +84,8 @@ namespace CaroAI
         #region Methods
         public void DrawBoard()
         {
-            CurrentPlayer = form.rBtnX.Checked ? 0 : 1;
+            CurrentPlayer = 0;
+            ComputerID = form.rBtnX.Checked ? 0 : 1;
             int LuotDiCuaMay = CurrentPlayer == 0 ? 1 : 0;
             form.imgCurrentPlayer.Image = Player[CurrentPlayer].Mark;
             isPVC = form.rBtnPVC.Checked;
@@ -179,14 +181,12 @@ namespace CaroAI
             {
                 if (CurrentPlayer == 1)
                 {
-                    await Task.Delay(ComputerSpeed);
                     await Task.Run(ComputerMove);
                 }
             }
 
             else
             {
-                await Task.Delay(ComputerSpeed);
                 await Task.Run(ComputerMove);
             }
         }
@@ -196,14 +196,23 @@ namespace CaroAI
         {
             Button btn;
             Point point;
-            if (CurrentPlayer == 0)
+
+            if (isPVC)
             {
-                point = advancedAI.FindBestMove(cells, CurrentPlayer + 1);
-            }
+                if (ComputerID == 0) point = simpleAI.FindBestMove(cells, CurrentPlayer + 1);
+                else point = advancedAI.FindBestMove(cells, CurrentPlayer + 1);
+            } 
             else
             {
-                point = simpleAI.FindBestMove(cells, CurrentPlayer + 1);
-            }
+                if (CurrentPlayer == 0)
+                {
+                    point = advancedAI.FindBestMove(cells, CurrentPlayer + 1);
+                }
+                else
+                {
+                    point = simpleAI.FindBestMove(cells, CurrentPlayer + 1);
+                }
+            }         
             btn = Matrix[point.Y][point.X];
             
             if (btn.InvokeRequired)
@@ -262,7 +271,7 @@ namespace CaroAI
         
         public void HelpPlayerMove()
         {
-            var pnt = advancedAI.FindBestMove(cells, CurrentPlayer);
+            var pnt = simpleAI.FindBestMove(cells, CurrentPlayer);
             var btn = Matrix[pnt.Y][pnt.X];
             btn.Focus();
         }
@@ -485,7 +494,6 @@ namespace CaroAI
             return false;
         }
         #endregion
-
         #endregion
     }
 }
