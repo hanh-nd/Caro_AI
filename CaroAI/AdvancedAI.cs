@@ -220,7 +220,7 @@ namespace CaroAI
             {
                 for (int v = 0; v < Cons.BOARD_WIDTH; v++)
                 {
-                    if (aValues[MaxPoint.X, MaxPoint.Y] * 0.5 <= aValues[u, v])
+                    if (aValues[MaxPoint.X, MaxPoint.Y] * 0.8 <= aValues[u, v])
                         Moves.Add(new Point(u, v));
                 }
             }
