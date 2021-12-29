@@ -26,7 +26,7 @@ namespace CaroAI
 
         private bool IsPossibleMove(int [,] CurrentStatus, int i, int j)
         {
-			if (CurrentStatus[i, j] > 0) return false;
+            if (CurrentStatus[i, j] > 0) return false;
 
 			for (int x = -1; x <= 1; x++)
 				for (int y = -1; y <= 1; y++)

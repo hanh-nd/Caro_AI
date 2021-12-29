@@ -20,7 +20,7 @@ namespace CaroAI
         public int XWins = 0;
         public int OWins = 0;
         public int DrawTimes = 0;
-        public int LoopTimes = 2;
+        public int LoopTimes = 10;
 
         public int XMoves = 0;
         public int OMoves = 0;
@@ -88,11 +88,18 @@ namespace CaroAI
 
         private void Simulation_Click(Point point)
         {
+            if (cells[point.X, point.Y] > 0)
+            {
+                List<Point> list = simpleAI.GetPossibleMoves(cells, CurrentPlayer);
+                Random rnd = new Random();
+                int r = rnd.Next(list.Count);
+                Simulation_Click(list[r]);              
+                return;
+            }
             CountMove++;
             if (CurrentPlayer == 0) XMoves++;
             else OMoves++;
             cells[point.X, point.Y] = CurrentPlayer + 1;
-            //PrintCurrentBoard();
             if (isEndGame(point))
             {
                 EndGame();
@@ -105,11 +112,13 @@ namespace CaroAI
         private void ComputerMove()
         {
             Point point;
+            var BoardClone = cells.Clone() as int[,];
+
             if (CurrentPlayer == 0)
-                point = advancedAI.FindBestMove(cells, CurrentPlayer + 1);
+                point = advancedAI.FindBestMove(BoardClone, CurrentPlayer + 1);
             else
-                point = simpleAI.FindBestMove(cells, CurrentPlayer + 1);           
-            Simulation_Click(point);                
+                point = simpleAI.FindBestMove(BoardClone, CurrentPlayer + 1);           
+            Simulation_Click(point);
         }
 
         private void PrintCurrentBoard()
@@ -252,7 +261,7 @@ namespace CaroAI
                     return false;
                 }
 
-                if (point.Y + countBottom + 1 > Cons.BOARD_HEIGHT)
+                if (point.Y + countBottom + 1 >= Cons.BOARD_HEIGHT)
                 {
                     if (cells[point.X, point.Y - countTop] == 0)
                         return true;
@@ -346,7 +355,7 @@ namespace CaroAI
                     return false;
                 }
 
-                if (point.X + countUp > Cons.BOARD_WIDTH || point.Y - countUp < 0)
+                if (point.X + countUp >= Cons.BOARD_WIDTH || point.Y - countUp < 0)
                 {
                     if (cells[point.X - countDown - 1, point.Y + countDown + 1] == 0)
                         return true;

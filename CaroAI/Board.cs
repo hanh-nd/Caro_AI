@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace CaroAI
 {
@@ -84,13 +85,22 @@ namespace CaroAI
         #region Methods
         public void DrawBoard()
         {
+            Console.WriteLine("Drawing board...");
             CurrentPlayer = 0;
             ComputerID = form.rBtnX.Checked ? 0 : 1;
-            int LuotDiCuaMay = CurrentPlayer == 0 ? 1 : 0;
             form.imgCurrentPlayer.Image = Player[CurrentPlayer].Mark;
             isPVC = form.rBtnPVC.Checked;
-            advancedAI = new AdvancedAI(LuotDiCuaMay + 1);
-            simpleAI = new SimpleAI(LuotDiCuaMay + 1);
+
+            if (isPVC)
+            {
+                advancedAI = new AdvancedAI(2);
+                simpleAI = new SimpleAI(2);
+            } 
+            else
+            {
+                advancedAI = new AdvancedAI(1);
+                simpleAI = new SimpleAI(2);
+            }
 
             EnableButtonOnBoard();
 
@@ -139,7 +149,7 @@ namespace CaroAI
 
             if (!isPVC || CurrentPlayer == 1)
             {
-                Matrix[new Random().Next(5, 10)][new Random().Next(5, 10)].PerformClick();
+                Matrix[new Random().Next(Cons.BOARD_HEIGHT / 3, 2 * Cons.BOARD_WIDTH / 3)][new Random().Next(Cons.BOARD_HEIGHT / 3, 2 * Cons.BOARD_WIDTH / 3)].PerformClick();
             }
         }
 
@@ -147,34 +157,55 @@ namespace CaroAI
         {
             BoardPnl.Enabled = true;
 
-            if (isPVC)
-            {
+            //if (isPVC)
+            //{
                 form.undo_btn.Enabled = true;
                 form.help_btn.Enabled = true;
-            }
+            //}
             // form.grpMode.Enabled = false;
             // form.grpXO.Enabled = false;
         }
 
+        private void PrintCurrentBoard()
+        {
+            for (int rw = 0; rw < Cons.BOARD_HEIGHT; ++rw)
+            {
+                for (int cl = 0; cl < Cons.BOARD_WIDTH; ++cl)
+                {
+                    Console.Write(cells[rw, cl] + " ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine("=================");
+        }
         private async void btn_Click(object sender, EventArgs e)
         {
             Button btn = sender as Button;
             if (btn.BackgroundImage != null)
+            {
+                //List<Point> list = simpleAI.GetPossibleMoves(cells, CurrentPlayer);
+                //Random rnd = new Random();
+                //int r = rnd.Next(list.Count);
+                //var button = Matrix[list[r].Y][list[r].X];
+                //button.PerformClick();
                 return;
+            }
 
             Mark(btn);
             Point point = GetPoint(btn);
 
             playTimeLine.Push(new CellInfo(point, CurrentPlayer));
             cells[point.X, point.Y] = CurrentPlayer + 1;
+            PrintCurrentBoard();
             ChangeCurrentPlayerMark();
-
             if (playerMarked != null)
                 playerMarked(this, new EventArgs());
 
             if (isEndGame(btn))
             {
+                Console.WriteLine("Ended");
                 EndGame();
+                return;
             }
 
             if (isPVC)
@@ -187,45 +218,40 @@ namespace CaroAI
 
             else
             {
+                await Task.Delay(500);
                 await Task.Run(ComputerMove);
             }
         }
-
-        delegate void ComputerMoveCallBack();
         private void ComputerMove()
         {
             Button btn;
             Point point;
-
+            var BoardClone = cells.Clone() as int[,];
             if (isPVC)
             {
-                if (ComputerID == 0) point = simpleAI.FindBestMove(cells, CurrentPlayer + 1);
-                else point = advancedAI.FindBestMove(cells, CurrentPlayer + 1);
-            } 
+                var watch = System.Diagnostics.Stopwatch.StartNew();
+                if (ComputerID == 0) point = simpleAI.FindBestMove(BoardClone, CurrentPlayer + 1);
+                else point = advancedAI.FindBestMove(BoardClone, CurrentPlayer + 1);
+                watch.Stop();
+                var elapsedMs = watch.ElapsedMilliseconds;
+                Console.WriteLine("Calculated after " + elapsedMs + " ms");
+            }
             else
             {
                 if (CurrentPlayer == 0)
                 {
-                    point = advancedAI.FindBestMove(cells, CurrentPlayer + 1);
+                    point = advancedAI.FindBestMove(BoardClone, CurrentPlayer + 1);
                 }
                 else
                 {
-                    point = simpleAI.FindBestMove(cells, CurrentPlayer + 1);
+                    point = simpleAI.FindBestMove(BoardClone, CurrentPlayer + 1);
                 }
-            }         
-            btn = Matrix[point.Y][point.X];
-            
-            if (btn.InvokeRequired)
-            {
-                ComputerMoveCallBack d = new ComputerMoveCallBack(ComputerMove);
-                btn.Invoke(d);
-                return;
             }
-            else
-            {
+            btn = Matrix[point.Y][point.X];
+            form.Invoke(new Action(() => { 
                 btn.PerformClick();
                 btn.Focus();
-            }
+            }));
         }
 
         private void ChangeCurrentPlayerMark()
@@ -381,7 +407,7 @@ namespace CaroAI
                     return false;
                 }
 
-                if (point.Y + countBottom + 1 > Cons.BOARD_HEIGHT)
+                if (point.Y + countBottom + 1 >= Cons.BOARD_HEIGHT)
                 {
                     if (Matrix[point.Y - countTop][point.X].BackgroundImage == null)
                         return true;
@@ -479,7 +505,7 @@ namespace CaroAI
                     return false;
                 }
 
-                if (point.X + countUp > Cons.BOARD_WIDTH || point.Y - countUp < 0)
+                if (point.X + countUp >= Cons.BOARD_WIDTH || point.Y - countUp < 0)
                 {
                     if (Matrix[point.Y + countDown + 1][point.X - countDown - 1].BackgroundImage == null)
                         return true;

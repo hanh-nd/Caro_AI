@@ -140,7 +140,7 @@ namespace CaroAI
         {
             easyToolStripMenuItem.Checked = false;
             mediumToolStripMenuItem.Checked = true;
-            Cons.MAX_DEPTH = 3;
+            Cons.MAX_DEPTH = 4;
         }
     }
 }
