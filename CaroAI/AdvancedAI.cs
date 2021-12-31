@@ -6,8 +6,8 @@ namespace CaroAI
 {
     class AdvancedAI: AI
     {
-        private int[] AttackPoints = new int[] { 0, 4, 28, 256, 2308 };
-        private int[] DefensePoints = new int[] { 0, 1, 9, 85, 769 };
+        private int[] AttackPoints = new int[] { 0, 4, 30, 250, 2500 };
+        private int[] DefensePoints = new int[] { 0, 1, 10, 100, 800 };
         public AdvancedAI(int ComputerTurn) : base(ComputerTurn) { }
 
         public override List<Point> GetPossibleMoves(int[,] CurrentStatus, int CurrentTurn)
@@ -190,7 +190,7 @@ namespace CaroAI
                                     else aValues[rw - i, cl + i] += AttackPoints[cComputer];
                                     if (CheckPosition(rw + 1, cl - 1) && CheckPosition(rw - 5, cl + 5) && CurrentStatus[rw + 1, cl - 1] == PlayerTurn 
                                         && CurrentStatus[rw - 5, cl + 5] == PlayerTurn)
-                                        aValues[rw + i, cl + i] = 0;
+                                        aValues[rw - i, cl + i] = 0;
                                 }
                                 if ((cComputer == 4 || cPlayer == 4) && ((CheckPosition(rw - i + 1, cl + i - 1) && CurrentStatus[rw - i + 1, cl + i - 1] == 0) 
                                     || (CheckPosition(rw - i - 1, cl + i + 1) && CurrentStatus[rw - i - 1, cl + i + 1] == 0)))
@@ -220,7 +220,7 @@ namespace CaroAI
             {
                 for (int v = 0; v < Cons.BOARD_WIDTH; v++)
                 {
-                    if (aValues[MaxPoint.X, MaxPoint.Y]  <= aValues[u, v])
+                    if (aValues[MaxPoint.X, MaxPoint.Y] * 0.5  <= aValues[u, v])
                         Moves.Add(new Point(u, v));
                 }
             }

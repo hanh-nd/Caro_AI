@@ -6,16 +6,16 @@ namespace CaroAI
     public partial class Game : Form
     {
         #region Properties
-        private SimulationBoard board;
-        //private Board board;
+        //private SimulationBoard board;
+        private Board board;
         private bool isEnded = true;
         #endregion
 
         public Game()
         {
             InitializeComponent();
-            board = new SimulationBoard(pnlCaroBoard, this);
-            //board = new Board(pnlCaroBoard, this);
+            //board = new SimulationBoard(pnlCaroBoard, this);
+            board = new Board(pnlCaroBoard, this);
             board.EndedGame += Board_EndedGame;
             board.PlayerMarked += Board_PlayerMarked;
             InitializeCoolDownProperties();
@@ -45,8 +45,12 @@ namespace CaroAI
         private void Board_EndedGame(object sender, EventArgs e)
         {
             EndedGame();
-            string winner = board.CurrentPlayer == 1 ? "X" : "O";
-            MessageBox.Show($"Kết thúc. {winner} chiến thắng.");
+            if (board.drawnGame) MessageBox.Show("Hoà");
+            else
+            {
+                string winner = board.CurrentPlayer == 1 ? "X" : "O";
+                MessageBox.Show($"Kết thúc. {winner} chiến thắng.");
+            }
         }
 
         private void InitializeCoolDownProperties()
@@ -125,7 +129,7 @@ namespace CaroAI
 
         private void Game_Load(object sender, EventArgs e)
         {
-            Cons.MAX_DEPTH = 3;
+            Cons.MAX_DEPTH = 2;
         }
 
 
@@ -133,14 +137,14 @@ namespace CaroAI
         {
             easyToolStripMenuItem.Checked = true;
             mediumToolStripMenuItem.Checked = false;
-            Cons.MAX_DEPTH = 3;
+            Cons.MAX_DEPTH = 2;
         }
 
         private void mediumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             easyToolStripMenuItem.Checked = false;
             mediumToolStripMenuItem.Checked = true;
-            Cons.MAX_DEPTH = 4;
+            Cons.MAX_DEPTH = 3;
         }
     }
 }

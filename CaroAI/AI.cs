@@ -21,6 +21,7 @@ namespace CaroAI
         public Point FindBestMove(int[,] CurrentStatus, int CurrentTurn)
         {           
             List<Point> Moves = GetPossibleMoves(CurrentStatus, CurrentTurn);
+            Console.WriteLine("Founded: " + Moves.Count + " moves");
             var move = SearchWinningMove(CurrentStatus, Moves, false);
             if (move.X != -1) return move;
             move = SearchWinningMove(CurrentStatus, Moves, true);

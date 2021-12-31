@@ -43,7 +43,7 @@ namespace CaroAI
             }
         }
 
-
+        public bool drawnGame = false;
         private event EventHandler endedGame;
         public event EventHandler EndedGame
         {
@@ -87,6 +87,7 @@ namespace CaroAI
         {
             Console.WriteLine("Drawing board...");
             CurrentPlayer = 0;
+            drawnGame = false;
             ComputerID = form.rBtnX.Checked ? 0 : 1;
             form.imgCurrentPlayer.Image = Player[CurrentPlayer].Mark;
             isPVC = form.rBtnPVC.Checked;
@@ -183,11 +184,14 @@ namespace CaroAI
             Button btn = sender as Button;
             if (btn.BackgroundImage != null)
             {
-                //List<Point> list = simpleAI.GetPossibleMoves(cells, CurrentPlayer);
-                //Random rnd = new Random();
-                //int r = rnd.Next(list.Count);
-                //var button = Matrix[list[r].Y][list[r].X];
-                //button.PerformClick();
+                if ((isPVC && CurrentPlayer == 1) || (!isPVC))
+                {
+                    List<Point> list = simpleAI.GetPossibleMoves(cells, CurrentPlayer);
+                    Random rnd = new Random();
+                    int r = rnd.Next(list.Count);
+                    var button = Matrix[list[r].Y][list[r].X];
+                    button.PerformClick();
+                }                
                 return;
             }
 
@@ -196,14 +200,13 @@ namespace CaroAI
 
             playTimeLine.Push(new CellInfo(point, CurrentPlayer));
             cells[point.X, point.Y] = CurrentPlayer + 1;
-            PrintCurrentBoard();
+            //PrintCurrentBoard();
             ChangeCurrentPlayerMark();
             if (playerMarked != null)
                 playerMarked(this, new EventArgs());
 
             if (isEndGame(btn))
             {
-                Console.WriteLine("Ended");
                 EndGame();
                 return;
             }
@@ -305,6 +308,7 @@ namespace CaroAI
         #region check end game
         public void EndGame()
         {
+            if (isDraw()) drawnGame = true;
             if (endedGame != null)
                 endedGame(this, new EventArgs());
         }

@@ -20,7 +20,7 @@ namespace CaroAI
         public int XWins = 0;
         public int OWins = 0;
         public int DrawTimes = 0;
-        public int LoopTimes = 2;
+        public int LoopTimes = 50;
 
         public int XMoves = 0;
         public int OMoves = 0;
